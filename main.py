@@ -10,7 +10,7 @@ from file import File
 
 current_file_path = os.path.expanduser("~")
 
-print(current_file_path)
+button_list = []
 
 # functions
 
@@ -35,36 +35,49 @@ def append_to_current_path(suffix: str):
 
     global current_file_path
     new_file_path = current_file_path + suffix
-    print(f'new path {new_file_path}')
     if os.path.exists(new_file_path):
 
         current_file_path = new_file_path
-        print(f'here {current_file_path}')
     return
 
+# Zle
 
-# TODO
+
 def detach_from_current_path(suffix: str):
+
     global current_file_path
-    new_file_path = current_file_path + suffix
+    if current_file_path.split('\\')[-1] == suffix:
+        return
+
+    dirs = current_file_path.split('\\')
+
+    new_file_path = current_file_path
+    while new_file_path.split('\\')[-1] != suffix:
+        new_file_path = '\\'.join(new_file_path.split('\\')[:-1])
+
+    print(new_file_path)
     if os.path.exists(new_file_path):
         current_file_path = new_file_path
-
-    pass
+        rebuild_breadcrumb()
+        rebuild_table()
 
 
 def open_folder(file: File):
     append_to_current_path('\\' + file.get_name())
-    rebuiled_table()
+    rebuild_breadcrumb()
+    rebuild_table()
 
 
 def open_file(file: File):
     pass
 
 
-def handel_double_click(event, files):
+def handel_file_double_click(event, files):
     is_folder, name, size, createion_data, modeyfication_date = treeview.item(
         treeview.focus())['values']
+
+    is_folder = True if is_folder == 'F' else False
+
     file = File(name, is_folder, size, createion_data, modeyfication_date)
 
     print(file)
@@ -77,9 +90,33 @@ def handel_double_click(event, files):
     open_file(file)
 
 
+def build_breadcrumb(path):
+    global button_list
+
+    path_components = path.split("\\")
+    current_path = ""
+
+    for index, component in enumerate(path_components):
+
+        current_path += component + "\\"
+        button = ttk.Button(frame, text=component,
+                            command=lambda path=current_path: detach_from_current_path(path.split('\\')[-2]))
+        button_list.append(button)
+        button.grid(row=0, column=index)
+
+
+def rebuild_breadcrumb():
+    global button_list
+    global current_file_path
+
+    for button in button_list:
+        button.destroy()
+    build_breadcrumb(current_file_path)
+
+
 def build_table(files):
-    label1 = tk.Button(frame, text=current_file_path, width=300)
-    label1.pack()
+    # label1 = tk.Button(frame, text=current_file_path, width=300)
+    # label1.pack()
 
     treeview.column("#0", width=0, stretch=tk.NO)
     treeview.column("Ikona",  width=50)
@@ -103,11 +140,11 @@ def build_table(files):
         treeview.insert(parent="", index="end",
                         values=(icon,) + file.get_data())
         treeview.bind(
-            "<Double-1>", lambda event: handel_double_click(event, files))
+            "<Double-1>", lambda event: handel_file_double_click(event, files))
     treeview.pack()
 
 
-def rebuiled_table():
+def rebuild_table():
     global treeview
     files = get_files(current_file_path)
     print(files)
@@ -134,5 +171,6 @@ treeview = ttk.Treeview(window)
 treeview["columns"] = ('Ikona', "Nazwa", "Rozmiar",
                        "Data utworzenia", "Data modyfikacji")
 
+build_breadcrumb(current_file_path)
 build_table(files)
 window.mainloop()
