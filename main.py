@@ -16,20 +16,23 @@ button_list = []
 # functions
 
 
-def get_file_metadata(directory, file_name):
-    file_path = os.path.join(directory, file_name)
-    file_size = os.path.getsize(file_path)
-    is_folder = os.path.isdir(file_path)
-    creation_time = datetime.datetime.fromtimestamp(
-        os.path.getctime(file_path))
-    modification_time = datetime.datetime.fromtimestamp(
-        os.path.getmtime(file_path))
-    return (file_name, is_folder, file_size, creation_time, modification_time)
+# def get_file_metadata(directory, file_name):
+#     file_path = os.path.join(directory, file_name)
+#     file_size = os.path.getsize(file_path)
+#     is_folder = os.path.isdir(file_path)
+#     creation_time = datetime.datetime.fromtimestamp(
+#         os.path.getctime(file_path))
+#     modification_time = datetime.datetime.fromtimestamp(
+#         os.path.getmtime(file_path))
+#     return (file_name, is_folder, file_size, creation_time, modification_time)
 
 
 def get_files(directory: str):
-    return [File(*get_file_metadata(directory, file_name))
-            for file_name in os.listdir(directory)]
+    # return [File(*get_file_metadata(directory, file_name))
+    #         for file_name in os.listdir(directory)]
+    # file_path = os.path.join(directory, file_name)
+
+    return [File(os.path.join(directory, file_name)) for file_name in os.listdir(directory)]
 
 
 def append_to_current_path(suffix: str):
@@ -90,13 +93,13 @@ def handel_file_double_click(event, files):
 
     is_folder = True if is_folder == 'F' else False
 
-    file = File(name, is_folder, size, createion_data, modeyfication_date)
+    file = File(os.path.join(current_file_path, name))
 
     print(file)
 
     if not file:
         return
-    if file.is_folder:
+    if file.is_folder():
         open_folder(file)
         return
     open_file(current_file_path + "//" + file.get_name())
@@ -148,7 +151,7 @@ def build_table(files):
         if file.get_name()[0] == '.':
             continue
 
-        icon = 'F' if file.is_folder else 'P'
+        icon = 'F' if file.is_folder() else 'P'
         treeview.insert(parent="", index="end",
                         values=(icon,) + file.get_data())
         treeview.bind(
