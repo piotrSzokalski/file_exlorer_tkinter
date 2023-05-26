@@ -1,3 +1,4 @@
+import subprocess
 import tkinter as tk
 from tkinter import ttk
 import os
@@ -68,11 +69,22 @@ def open_folder(file: File):
     rebuild_table()
 
 
-def open_file(file: File):
-    pass
+def open_file(file_path: str):
+    try:
+        subprocess.run(['xdg-open', file_path])  # Linux
+    except FileNotFoundError:
+        try:
+            subprocess.run(['open', file_path])  # macOS
+        except FileNotFoundError:
+            try:
+                subprocess.run(['start', file_path], shell=True)  # Windows
+            except FileNotFoundError:
+                print("Failed to open the file.")
 
 
 def handel_file_double_click(event, files):
+    global current_file_path
+
     is_folder, name, size, createion_data, modeyfication_date = treeview.item(
         treeview.focus())['values']
 
@@ -87,7 +99,7 @@ def handel_file_double_click(event, files):
     if file.is_folder:
         open_folder(file)
         return
-    open_file(file)
+    open_file(current_file_path + "//" + file.get_name())
 
 
 def build_breadcrumb(path):
