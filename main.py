@@ -13,25 +13,8 @@ current_file_path = os.path.expanduser("~")
 
 button_list = []
 
-# functions
-
-
-# def get_file_metadata(directory, file_name):
-#     file_path = os.path.join(directory, file_name)
-#     file_size = os.path.getsize(file_path)
-#     is_folder = os.path.isdir(file_path)
-#     creation_time = datetime.datetime.fromtimestamp(
-#         os.path.getctime(file_path))
-#     modification_time = datetime.datetime.fromtimestamp(
-#         os.path.getmtime(file_path))
-#     return (file_name, is_folder, file_size, creation_time, modification_time)
-
 
 def get_files(directory: str):
-    # return [File(*get_file_metadata(directory, file_name))
-    #         for file_name in os.listdir(directory)]
-    # file_path = os.path.join(directory, file_name)
-
     return [File(os.path.join(directory, file_name)) for file_name in os.listdir(directory)]
 
 
@@ -59,7 +42,6 @@ def detach_from_current_path(suffix: str):
     while new_file_path.split('\\')[-1] != suffix:
         new_file_path = '\\'.join(new_file_path.split('\\')[:-1])
 
-    print(new_file_path)
     if os.path.exists(new_file_path):
         current_file_path = new_file_path
         rebuild_breadcrumb()
@@ -130,8 +112,6 @@ def rebuild_breadcrumb():
 
 
 def build_table(files):
-    # label1 = tk.Button(frame, text=current_file_path, width=300)
-    # label1.pack()
 
     treeview.column("#0", width=0, stretch=tk.NO)
     treeview.column("Ikona",  width=50)
@@ -162,7 +142,7 @@ def build_table(files):
 def rebuild_table():
     global treeview
     files = get_files(current_file_path)
-    print(files)
+
     treeview.delete(*treeview.get_children())
     build_table(files)
 

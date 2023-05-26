@@ -15,16 +15,6 @@ class File:
         self._modification_time = datetime.datetime.fromtimestamp(
             os.path.getmtime(file_path))
 
-    def get_file_metadata(directory, file_name):
-        file_path = os.path.join(directory, file_name)
-        file_size = os.path.getsize(file_path)
-        is_folder = os.path.isdir(file_path)
-        creation_time = datetime.datetime.fromtimestamp(
-            os.path.getctime(file_path))
-        modification_time = datetime.datetime.fromtimestamp(
-            os.path.getmtime(file_path))
-        return (file_name, is_folder, file_size, creation_time, modification_time)
-
     def get_path(self) -> str:
         return self.get_path
 
