@@ -2,7 +2,6 @@ import subprocess
 import tkinter as tk
 from tkinter import ttk
 import os
-import datetime
 import sys
 
 from file import File
@@ -23,18 +22,13 @@ class FileExplorer:
         self.frame.pack()
 
         # dropdown dysku
-
         self.drives = self.get_available_drives()
 
-        print(f'drives {self.drives}')
         self.selected_dive = tk.StringVar()
 
         self.selected_dive.set(self.drives[0])
 
-        self.disk_dropdown = tk.OptionMenu(
-            self.window, self.selected_dive, *self.drives, command=self.change_drive)
-
-        self.disk_dropdown.pack()
+        self.build_dropdown()
 
         # tabela z plikami
 
@@ -105,9 +99,9 @@ class FileExplorer:
     def change_drive(self, selection):
         if os.path.exists(selection):
             self.current_file_path = selection
+            self.selected_dive.set(selection)
 
-            self.rebuild_breadcrumb()
-            self.rebuild_table()
+            self.rebuild_ui()
         else:
             print(f'wrong path {selection}')
 
@@ -129,10 +123,19 @@ class FileExplorer:
             return
         self.open_file(self.current_file_path + "//" + file.get_name())
 
+    def build_dropdown(self):
+
+        self.disk_dropdown = tk.OptionMenu(
+            self.frame, self.selected_dive, *self.drives, command=self.change_drive)
+
+        self.disk_dropdown.grid(row=0, column=0)
+
     def build_breadcrumb(self, path):
 
-        path_components = path.split("\\")
+        path_components = path.split("\\")[1:]
         current_path = ""
+
+        self.build_dropdown()
 
         for index, component in enumerate(path_components):
             if component == '':
@@ -142,7 +145,7 @@ class FileExplorer:
             button = ttk.Button(self.frame, text=component,
                                 command=lambda path=current_path: self.detach_from_current_path(path.split('\\')[-2]))
             self.button_list.append(button)
-            button.grid(row=0, column=index)
+            button.grid(row=0, column=index + 1)
 
     def rebuild_breadcrumb(self):
 
