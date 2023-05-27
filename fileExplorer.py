@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 import os
 import datetime
+import sys
 
 from file import File
 
@@ -64,17 +65,19 @@ class FileExplorer:
         self.rebuild_breadcrumb()
         self.rebuild_table()
 
-    def open_file(self, file_path: str):
+    def open_file(self, file_path):
         try:
-            subprocess.run(['xdg-open', file_path])  # Linux
-        except FileNotFoundError:
-            try:
-                subprocess.run(['open', file_path])  # macOS
-            except FileNotFoundError:
-                try:
-                    subprocess.run(['start', file_path], shell=True)  # Windows
-                except FileNotFoundError:
-                    print("Failed to open the file.")
+            if sys.platform == 'linux':
+                subprocess.run(['xdg-open', file_path])
+            elif sys.platform == 'darwin':
+                subprocess.run(['open', file_path])
+            elif sys.platform == 'win32':
+                subprocess.run(
+                    ['cmd', '/c', 'start', '', file_path], shell=True)
+            else:
+                raise OSError(f'Unsupported platform: {sys.platform}')
+        except Exception as e:
+            print(f'Error opening file: {e}')
 
     def handel_file_double_click(self):
 
