@@ -5,6 +5,9 @@ import os
 class File:
     def __init__(self, file_path: str) -> None:
 
+        if file_path[2] != '\\':
+            file_path = file_path[:2] + '\\' + file_path[2:]
+
         self.path = file_path
 
         self._name = file_path.split("\\")[-1]
