@@ -21,6 +21,8 @@ class FileExplorer:
         self.frame = tk.Frame(self.window, bg="gray", bd=2, relief=tk.RAISED)
         self.frame.pack()
 
+        self.window.bind("<FocusIn>", self.on_window_focused)
+
         # dropdown dysku
         self.drives = self.get_available_drives()
 
@@ -36,6 +38,9 @@ class FileExplorer:
 
         self.treeview["columns"] = ('Ikona', "Nazwa", "Rozmiar",
                                     "Data utworzenia", "Data modyfikacji")
+
+    def on_window_focused(self, event):
+        self.get_from_os_clipboard()
 
     def run(self):
         self.build_breadcrumb(self.current_file_path)
@@ -53,12 +58,16 @@ class FileExplorer:
     def get_files(self, directory: str):
         return [File(os.path.join(directory, file_name)) for file_name in os.listdir(directory)]
 
-    def get_selected_files(self):
+    def get_selected_file_paths(self):
         selected_record_names = [self.treeview.item(selection)["values"][1]
                                  for selection in self.treeview.selection()]
-        selected_record_paths = [file.get_path(
+        print(
+            f'Selected records names (from get_selected_file_paths)\n')
+        # naprawka, czemu to konieczne ?
+        self.files = self.get_files(self.current_file_path)
+
+        return [file.get_path(
         ) for file in self.files if file.get_name() in selected_record_names]
-        print(selected_record_paths)
 
     def append_to_current_path(self, suffix: str):
 
@@ -130,13 +139,35 @@ class FileExplorer:
             return
         self.open_file(self.current_file_path + "//" + file.get_name())
 
-    def copy_files(self):
-        pass
+    def get_from_os_clipboard(self):
+        try:
+            data = self.window.clipboard_get()
+            self.window.clipboard_append(data + '\n')
+        except:
+            pass
+
+    def copy_files_paths_to_clipboard(self, paths):
+        print('Copping files')
+        self.window.clipboard_clear()
+        for path in paths:
+            self.window.clipboard_append(path)
+        self.window.update()
+        data = self.window.clipboard_get()
+        print(data)
 
     def cut_files(self):
         pass
 
     def remove_files(self):
+        pass
+
+    def rename_file(self):
+        pass
+
+    def create_folder(self):
+        pass
+
+    def create_file(self):
         pass
 
     def build_dropdown(self):
@@ -151,13 +182,25 @@ class FileExplorer:
 
     def build_files_actions_menu(self):
         actions_menu = tk.Menu(self.window, tearoff=False)
-        # context_menu.add_command(label="Stwórz Folder", command=option1_callback)
-        # context_menu.add_command(label="Stwórz Plik", command=option1_callback)
-        # context_menu.add_command(label="Zmień nazwę", command=option1_callback)
 
-        self.get_selected_files()
+        selected_file_paths = self.get_selected_file_paths()
 
-        actions_menu.add_command(label="Kopiuj", command=self.copy_files)
+        print(f'Building actions menu \n {selected_file_paths}')
+
+        if len(selected_file_paths) == 0:
+            actions_menu.add_command(
+                label="Stwórz Folder", command=self.create_folder)
+            actions_menu.add_command(
+                label="Stwórz Plik", command=self.create_file)
+
+            return actions_menu
+
+        if len(selected_file_paths) == 1:
+            actions_menu.add_command(
+                label="Zmień nazwę", command=self.rename_file)
+
+        actions_menu.add_command(
+            label="Kopiuj", command=lambda paths=selected_file_paths: self.copy_files_paths_to_clipboard(paths))
         actions_menu.add_command(label="Wytnij", command=self.cut_files)
         actions_menu.add_command(label="Usuń", command=self.remove_files)
         return actions_menu
