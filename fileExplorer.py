@@ -32,7 +32,7 @@ class FileExplorer:
 
         # tabela z plikami
 
-        self.treeview = ttk.Treeview(self.window)
+        self.treeview = ttk.Treeview(self.window, selectmode='extended')
 
         self.treeview["columns"] = ('Ikona', "Nazwa", "Rozmiar",
                                     "Data utworzenia", "Data modyfikacji")
@@ -52,6 +52,13 @@ class FileExplorer:
 
     def get_files(self, directory: str):
         return [File(os.path.join(directory, file_name)) for file_name in os.listdir(directory)]
+
+    def get_selected_files(self):
+        selected_record_names = [self.treeview.item(selection)["values"][1]
+                                 for selection in self.treeview.selection()]
+        selected_record_paths = [file.get_path(
+        ) for file in self.files if file.get_name() in selected_record_names]
+        print(selected_record_paths)
 
     def append_to_current_path(self, suffix: str):
 
@@ -123,12 +130,37 @@ class FileExplorer:
             return
         self.open_file(self.current_file_path + "//" + file.get_name())
 
+    def copy_files(self):
+        pass
+
+    def cut_files(self):
+        pass
+
+    def remove_files(self):
+        pass
+
     def build_dropdown(self):
 
         self.disk_dropdown = tk.OptionMenu(
             self.frame, self.selected_dive, *self.drives, command=self.change_drive)
 
         self.disk_dropdown.grid(row=0, column=0)
+
+    def show_file_actions_menu(self, event):
+        self.build_files_actions_menu().post(event.x_root, event.y_root)
+
+    def build_files_actions_menu(self):
+        actions_menu = tk.Menu(self.window, tearoff=False)
+        # context_menu.add_command(label="Stwórz Folder", command=option1_callback)
+        # context_menu.add_command(label="Stwórz Plik", command=option1_callback)
+        # context_menu.add_command(label="Zmień nazwę", command=option1_callback)
+
+        self.get_selected_files()
+
+        actions_menu.add_command(label="Kopiuj", command=self.copy_files)
+        actions_menu.add_command(label="Wytnij", command=self.cut_files)
+        actions_menu.add_command(label="Usuń", command=self.remove_files)
+        return actions_menu
 
     def build_breadcrumb(self, path):
 
@@ -146,12 +178,6 @@ class FileExplorer:
                                 command=lambda path=current_path: self.detach_from_current_path(path.split('\\')[-2]))
             self.button_list.append(button)
             button.grid(row=0, column=index + 1)
-
-    def rebuild_breadcrumb(self):
-
-        for button in self.button_list:
-            button.destroy()
-        self.build_breadcrumb(self.current_file_path)
 
     def build_table(self, files):
 
@@ -180,12 +206,18 @@ class FileExplorer:
                                  values=(icon,) + file.get_data())
             self.treeview.bind(
                 "<Double-1>", lambda event: self.handel_file_double_click())
-        self.treeview.pack()
+
+            self.treeview.bind("<Button-3>", self.show_file_actions_menu)
+
+        self.treeview.pack(fill=tk.BOTH, expand=True)
+
+    def rebuild_breadcrumb(self):
+        for button in self.button_list:
+            button.destroy()
+        self.build_breadcrumb(self.current_file_path)
 
     def rebuild_table(self):
-
         files = self.get_files(self.current_file_path)
-
         self.treeview.delete(*self.treeview.get_children())
         self.build_table(files)
 

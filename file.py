@@ -19,7 +19,7 @@ class File:
             os.path.getmtime(file_path))
 
     def get_path(self) -> str:
-        return self.get_path
+        return self.path
 
     def get_name(self) -> str:
         return self._name
