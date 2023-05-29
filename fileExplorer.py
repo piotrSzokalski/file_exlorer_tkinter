@@ -1,8 +1,10 @@
+import datetime
 import subprocess
 import tkinter as tk
 from tkinter import ttk
 import os
 import sys
+import shutil
 
 from file import File
 
@@ -61,8 +63,6 @@ class FileExplorer:
     def get_selected_file_paths(self):
         selected_record_names = [self.treeview.item(selection)["values"][1]
                                  for selection in self.treeview.selection()]
-        print(
-            f'Selected records names (from get_selected_file_paths)\n')
         # naprawka, czemu to konieczne ?
         self.files = self.get_files(self.current_file_path)
 
@@ -139,6 +139,14 @@ class FileExplorer:
             return
         self.open_file(self.current_file_path + "//" + file.get_name())
 
+    def can_paste_files(self) -> bool:
+        try:
+            data = self.window.clipboard_get()
+            print(f'in can_paste_files: \n {data}')
+            return True
+        except:
+            return False
+
     def get_from_os_clipboard(self):
         try:
             data = self.window.clipboard_get()
@@ -147,16 +155,49 @@ class FileExplorer:
             pass
 
     def copy_files_paths_to_clipboard(self, paths):
-        print('Copping files')
+        # print('Copping files')
         self.window.clipboard_clear()
         for path in paths:
-            self.window.clipboard_append(path)
+            self.window.clipboard_append(path + '\n')
         self.window.update()
-        data = self.window.clipboard_get()
-        print(data)
+        # data = self.window.clipboard_get()
+        # print(data)
 
     def cut_files(self):
         pass
+
+    def pase_files(self):
+        print('Pasting files:')
+        file_paths = self.window.clipboard_get().split('\n')
+
+        for file_path in file_paths:
+            if not os.path.exists(file_path):
+                continue
+
+            # copied_file_new_path = file_path NIE NIE NIE
+
+            copied_file_new_path = self.current_file_path
+
+            file_name = file_path.split('\\')[-1]
+            # jesli obecnym folderze istnieje plik o takiej samej nazwie
+            if os.path.exists(self.current_file_path + '\\' + file_name):
+                timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+                copied_file_new_path = self.current_file_path + \
+                    "\\" + file_name + '(' + timestamp + ')'
+
+                # print('noewa nazwa:  ' + copied_file_new_path)
+
+            try:
+                if os.path.isdir(file_path):
+                    shutil.copytree(src=file_path,
+                                    dst=copied_file_new_path)
+                else:
+                    shutil.copy(src=file_path,
+                                dst=copied_file_new_path)
+            except:
+                print('Nie udało sie wkleić')
+
+        self.rebuild_table()
 
     def remove_files(self):
         pass
@@ -185,7 +226,7 @@ class FileExplorer:
 
         selected_file_paths = self.get_selected_file_paths()
 
-        print(f'Building actions menu \n {selected_file_paths}')
+        # print(f'Building actions menu \n {selected_file_paths}')
 
         if len(selected_file_paths) == 0:
             actions_menu.add_command(
@@ -193,6 +234,9 @@ class FileExplorer:
             actions_menu.add_command(
                 label="Stwórz Plik", command=self.create_file)
 
+            if self.can_paste_files():
+                actions_menu.add_command(
+                    label="Wklej", command=self.pase_files)
             return actions_menu
 
         if len(selected_file_paths) == 1:
