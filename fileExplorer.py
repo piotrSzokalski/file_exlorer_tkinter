@@ -181,11 +181,8 @@ class FileExplorer:
             file_name = file_path.split('\\')[-1]
             # jesli obecnym folderze istnieje plik o takiej samej nazwie
             if os.path.exists(self.current_file_path + '\\' + file_name):
-                timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-                file_name, file_extention = file_name.split('.')
-                file_extention += '.' + file_extention
-                copied_file_new_path = self.current_file_path + \
-                    "\\" + file_name + '(' + timestamp + ')' + file_extention
+
+                copied_file_new_path = self.create_new_file_name(file_name)
 
                 # print('noewa nazwa:  ' + copied_file_new_path)
 
@@ -201,6 +198,19 @@ class FileExplorer:
 
         self.rebuild_table()
 
+    # Nowa nazwa aby uniknąć dwupłatowych nazw
+    def create_new_file_name(self, file_name):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        try:
+            file_name, file_extention = file_name.split('.')
+            new_file_name = self.current_file_path + \
+                "\\" + file_name + '(' + timestamp + ')' + '.' + file_extention
+        except ValueError:
+            new_file_name = self.current_file_path + \
+                "\\" + file_name + '(' + timestamp + ')'
+
+        return new_file_name
+
     def remove_files(self):
         pass
 
@@ -211,8 +221,15 @@ class FileExplorer:
         pass
 
     def create_file(self, file_name):
-        with open(self.current_file_path + '\\' + file_name, 'w') as new_file:
+        file_path = os.path.join(self.current_file_path, file_name)
+
+        if os.path.exists(file_path):
+            file_name = self.create_new_file_name(file_name)
+            file_path = os.path.join(self.current_file_path, file_name)
+
+        with open(file_path, 'w') as new_file:
             pass
+
         self.rebuild_table()
 
     def build_dropdown(self):
