@@ -58,12 +58,12 @@ class FileExplorer:
         return drives
 
     def get_files(self, directory: str):
-        return [File(os.path.join(directory, file_name)) for file_name in os.listdir(directory)]
+        return sorted([File(os.path.join(directory, file_name)) for file_name in os.listdir(directory)], key=lambda file: file.get_name())
 
     def get_selected_file_paths(self):
         selected_record_names = [self.treeview.item(selection)["values"][1]
                                  for selection in self.treeview.selection()]
-        # naprawka, czemu to konieczne ?
+        # naprawka
         self.files = self.get_files(self.current_file_path)
 
         return [file.get_path(
@@ -142,7 +142,7 @@ class FileExplorer:
     def can_paste_files(self) -> bool:
         try:
             data = self.window.clipboard_get()
-            print(f'in can_paste_files: \n {data}')
+            # print(f'in can_paste_files: \n {data}')
             return True
         except:
             return False
@@ -204,14 +204,16 @@ class FileExplorer:
     def remove_files(self):
         pass
 
-    def rename_file(self):
+    def rename_file(self, file_name):
         pass
 
-    def create_folder(self):
+    def create_folder(self, folder_name):
         pass
 
-    def create_file(self):
-        pass
+    def create_file(self, file_name):
+        with open(self.current_file_path + '\\' + file_name, 'w') as new_file:
+            pass
+        self.rebuild_table()
 
     def build_dropdown(self):
 
@@ -219,6 +221,29 @@ class FileExplorer:
             self.frame, self.selected_dive, *self.drives, command=self.change_drive)
 
         self.disk_dropdown.grid(row=0, column=0)
+
+    def show_file_name_prompt_window(self, mode='create_file', title="Utwórz nowy plik"):
+        prompt_window = tk.Toplevel(self.window)
+        prompt_window.title(title)
+
+        label = tk.Label(prompt_window, text=title)
+        label.pack()
+        entry = tk.Entry(prompt_window)
+        entry.pack()
+
+        def process_input():
+            user_input = entry.get()
+            prompt_window.destroy()
+            prompt_actions = {
+                'create_file': self.create_file,
+                'create_folder': self.create_folder,
+                'rename_file': self.rename_file,
+            }
+            prompt_actions[mode](user_input)
+
+        ok_button = tk.Button(
+            prompt_window, text="OK", command=process_input)
+        ok_button.pack()
 
     def show_file_actions_menu(self, event):
         self.build_files_actions_menu().post(event.x_root, event.y_root)
@@ -232,9 +257,9 @@ class FileExplorer:
 
         if len(selected_file_paths) == 0:
             actions_menu.add_command(
-                label="Stwórz Folder", command=self.create_folder)
+                label="Stwórz Folder", command=lambda: self.show_file_name_prompt_window(mode='create_folder', title='Stwórz folder'))
             actions_menu.add_command(
-                label="Stwórz Plik", command=self.create_file)
+                label="Stwórz Plik", command=lambda: self.show_file_name_prompt_window(mode='create_file', title='Stwórz plik'))
 
             if self.can_paste_files():
                 actions_menu.add_command(
@@ -243,7 +268,7 @@ class FileExplorer:
 
         if len(selected_file_paths) == 1:
             actions_menu.add_command(
-                label="Zmień nazwę", command=self.rename_file)
+                label="Zmień nazwę", command=lambda: self.show_file_name_prompt_window(mode='rename_file', title='Zmień nazwę'))
 
         actions_menu.add_command(
             label="Kopiuj", command=lambda paths=selected_file_paths: self.copy_files_paths_to_clipboard(paths))
