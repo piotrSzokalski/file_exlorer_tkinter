@@ -15,6 +15,7 @@ class FileExplorer:
         self.button_list = []
 
         self.files = self.get_files(self.current_file_path)
+        self.selected_files = []
 
         self.window = tk.Tk()
         self.window.title("Eksplorator plików")
@@ -43,6 +44,23 @@ class FileExplorer:
 
     def on_window_focused(self, event):
         self.get_from_os_clipboard()
+
+    # TODO
+    def handle_select(self, event):
+        # print("______________________________")
+        selected_rows = self.treeview.selection()
+
+        files = []
+
+        for row in selected_rows:
+            item_data = self.treeview.item(row)['values']
+            file_path = os.path.join(self.current_file_path, item_data[1])
+            if (os.path.exists(file_path)):
+                files.append(File(file_path))
+
+        self.selected_files = files
+
+        # print("Selected:", selected_names)
 
     def run(self):
         self.build_breadcrumb(self.current_file_path)
@@ -94,6 +112,16 @@ class FileExplorer:
             self.rebuild_breadcrumb()
             self.rebuild_table()
 
+    def table_row_to_file(self) -> File:
+        is_folder, name, size, createion_data, modeyfication_date = self.treeview.item(
+            self.treeview.focus())['values']
+
+        print("________________________________________")
+        print(self.treeview.item(self.treeview.focus())['values'])
+        print("________________________________________")
+
+        return File(os.path.join(self.current_file_path, name))
+
     def open_folder(self, file: File):
         self.append_to_current_path('\\' + file.get_name())
         self.rebuild_ui()
@@ -126,6 +154,7 @@ class FileExplorer:
         is_folder, name, size, createion_data, modeyfication_date = self.treeview.item(
             self.treeview.focus())['values']
 
+        # chyba zbedne
         is_folder = True if is_folder == 'F' else False
 
         file = File(os.path.join(self.current_file_path, name))
@@ -137,6 +166,7 @@ class FileExplorer:
         if file.is_folder():
             self.open_folder(file)
             return
+        # Zrefaktorowac
         self.open_file(self.current_file_path + "//" + file.get_name())
 
     def can_paste_files(self) -> bool:
@@ -212,7 +242,18 @@ class FileExplorer:
         return new_file_name
 
     def remove_files(self):
-        pass
+        for file in self.selected_files:
+            if file.is_folder():
+                self.delete_folder(file)
+            else:
+                self.delete_file(file)
+        self.rebuild_table()
+
+    def delete_folder(self, file: File) -> None:
+        shutil.rmtree(file.path)
+
+    def delete_file(self, file: File) -> None:
+        os.remove(file.get_path())
 
     def rename_file(self, file_name):
         pass
@@ -339,6 +380,8 @@ class FileExplorer:
                 "<Double-1>", lambda event: self.handel_file_double_click())
 
             self.treeview.bind("<Button-3>", self.show_file_actions_menu)
+
+            self.treeview.bind("<<TreeviewSelect>>", self.handle_select)
 
         self.treeview.pack(fill=tk.BOTH, expand=True)
 
