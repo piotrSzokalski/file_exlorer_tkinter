@@ -44,6 +44,8 @@ class FileExplorer:
 
     def on_window_focused(self, event):
         self.get_from_os_clipboard()
+        # print('HERE')
+        self.rebuild_table()
 
     # TODO
     def handle_select(self, event):
@@ -89,8 +91,9 @@ class FileExplorer:
 
     def append_to_current_path(self, suffix: str):
 
-        self.current_file_path
-        new_file_path = self.current_file_path + suffix
+        # self.current_file_path
+        # new_file_path = self.current_file_path + suffix
+        new_file_path = os.path.join(self.current_file_path, suffix)
         if os.path.exists(new_file_path):
 
             self.current_file_path = new_file_path
@@ -123,8 +126,14 @@ class FileExplorer:
         return File(os.path.join(self.current_file_path, name))
 
     def open_folder(self, file: File):
-        self.append_to_current_path('\\' + file.get_name())
-        self.rebuild_ui()
+        path_before_opening = self.current_file_path
+        try:
+            self.append_to_current_path(file.get_name())
+            self.rebuild_ui()
+        except Exception as ex:
+            print(f'Exception: {ex}')
+            self.current_file_path = path_before_opening
+            self.open_popup(f'Nie można otworzyć pliku \n {ex}')
 
     def open_file(self, file_path):
         try:
@@ -150,24 +159,26 @@ class FileExplorer:
             print(f'wrong path {selection}')
 
     def handel_file_double_click(self):
+        try:
+            is_folder, name, size, createion_data, modeyfication_date = self.treeview.item(
+                self.treeview.focus())['values']
 
-        is_folder, name, size, createion_data, modeyfication_date = self.treeview.item(
-            self.treeview.focus())['values']
+            # chyba zbedne
+            is_folder = True if is_folder == 'F' else False
 
-        # chyba zbedne
-        is_folder = True if is_folder == 'F' else False
+            file = File(os.path.join(self.current_file_path, name))
 
-        file = File(os.path.join(self.current_file_path, name))
+            # print(file)
 
-        # print(file)
-
-        if not file:
-            return
-        if file.is_folder():
-            self.open_folder(file)
-            return
-        # Zrefaktorowac
-        self.open_file(self.current_file_path + "//" + file.get_name())
+            if not file:
+                return
+            if file.is_folder():
+                self.open_folder(file)
+                return
+            # Zrefaktorowac
+            self.open_file(self.current_file_path + "//" + file.get_name())
+        except:
+            pass
 
     def can_paste_files(self) -> bool:
         try:
@@ -180,6 +191,7 @@ class FileExplorer:
     def get_from_os_clipboard(self):
         try:
             data = self.window.clipboard_get()
+            self.window.clipboard_clear()
             self.window.clipboard_append(data + '\n')
         except:
             pass
@@ -208,9 +220,9 @@ class FileExplorer:
 
             copied_file_new_path = self.current_file_path
 
-            file_name = file_path.split('\\')[-1]
+            file_name = os.path.split(file_path)[-1]
             # jesli obecnym folderze istnieje plik o takiej samej nazwie
-            if os.path.exists(self.current_file_path + '\\' + file_name):
+            if os.path.exists(os.path.join(self.current_file_path, file_name)):
 
                 copied_file_new_path = self.create_new_file_name(file_name)
 
@@ -219,12 +231,12 @@ class FileExplorer:
             try:
                 if os.path.isdir(file_path):
                     shutil.copytree(src=file_path,
-                                    dst=copied_file_new_path)
+                                    dst=copied_file_new_path,  dirs_exist_ok=True, copy_function=shutil.copy)
                 else:
                     shutil.copy(src=file_path,
                                 dst=copied_file_new_path)
-            except:
-                print('Nie udało sie wkleić')
+            except Exception as ex:
+                self.open_popup(f'Nie udało sie wkleić \n{ex}')
 
         self.rebuild_table()
 
@@ -259,19 +271,33 @@ class FileExplorer:
         pass
 
     def create_folder(self, folder_name):
-        pass
+        folder_path = os.path.join(self.current_file_path, folder_name)
+        if os.path.exists(folder_path):
+            folder_name = self.create_new_file_name(folder_name)
+            folder_path = os.path.join(self.current_file_path, folder_name)
+        os.mkdir(folder_path)
+        self.rebuild_table()
 
     def create_file(self, file_name):
         file_path = os.path.join(self.current_file_path, file_name)
-
         if os.path.exists(file_path):
             file_name = self.create_new_file_name(file_name)
             file_path = os.path.join(self.current_file_path, file_name)
-
         with open(file_path, 'w') as new_file:
             pass
 
         self.rebuild_table()
+
+    def open_popup(self, text="Błąd"):
+        print('here')
+        popup = tk.Toplevel()
+        popup.title("Popup Window")
+
+        label = tk.Label(popup, text=text)
+        label.pack(pady=10)
+
+        button = tk.Button(popup, text="Close", command=popup.destroy)
+        button.pack(pady=10)
 
     def build_dropdown(self):
 
