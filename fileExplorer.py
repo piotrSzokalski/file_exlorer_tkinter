@@ -21,6 +21,8 @@ class FileExplorer:
         self.files = self.get_files(self.current_file_path)
         self.selected_files = []
 
+        self.cutting_files_mode = False
+
         self.window = tk.Tk()
         self.window.title("Eksplorator plików")
         self.window.geometry("1000x800")
@@ -46,14 +48,30 @@ class FileExplorer:
         self.treeview["columns"] = ('Typ', "Nazwa", "Rozmiar",
                                     "Data utworzenia", "Data modyfikacji")
 
+        style = ttk.Style()
+
+        style.configure("Custom.Treeview",
+                        background="#e0e0e0",
+                        foreground="black",
+                        fieldbackground="#f0f0f0",
+                        font=("Arial", 12),
+                        borderwidth=0,
+                        highlightthickness=0,
+                        rowheight=30
+                        )
+
+        style.map("Custom.Treeview",
+                  background=[('selected', '#a0a0a0')],
+                  foreground=[('selected', 'white')]
+                  )
+
+        self.treeview.config(style="Custom.Treeview")
+
     def on_window_focused(self, event):
         self.get_from_os_clipboard()
-        # print('HERE')
         self.rebuild_table()
 
-    # TODO
     def handle_select(self, event):
-        # print("______________________________")
         selected_rows = self.treeview.selection()
 
         files = []
@@ -65,8 +83,6 @@ class FileExplorer:
                 files.append(File(file_path))
 
         self.selected_files = files
-
-        # print("Selected:", selected_names)
 
     def run(self):
         self.build_breadcrumb(self.current_file_path)
@@ -139,10 +155,6 @@ class FileExplorer:
         is_folder, name, size, createion_data, modeyfication_date = self.treeview.item(
             self.treeview.focus())['values']
 
-        print("________________________________________")
-        print(self.treeview.item(self.treeview.focus())['values'])
-        print("________________________________________")
-
         return File(os.path.join(self.current_file_path, name))
 
     def open_folder(self, file: File):
@@ -151,7 +163,6 @@ class FileExplorer:
             self.append_to_current_path(file.get_name())
             self.rebuild_ui()
         except Exception as ex:
-            print(f'Exception: {ex}')
             self.current_file_path = path_before_opening
             self.open_popup(f'Nie można otworzyć pliku \n {ex}')
 
@@ -170,8 +181,8 @@ class FileExplorer:
                         f'Nie można otworzyć tego pliku:\n{error_message}')
             else:
                 raise OSError(f'Unsupported platform: {sys.platform}')
-        except Exception as e:
-            print(f'Error opening file: {e}')
+        except Exception as ex:
+            self.open_popup(f'Nie można otworzyć pliku {ex}')
 
     def change_drive(self, selection):
         if os.path.exists(selection):
@@ -180,35 +191,29 @@ class FileExplorer:
 
             self.rebuild_ui()
         else:
-            print(f'wrong path {selection}')
+            self.open_popup(f'wrong path {selection}')
 
     def handel_file_double_click(self):
         try:
             is_folder, name, size, createion_data, modeyfication_date = self.treeview.item(
                 self.treeview.focus())['values']
 
-            # chyba zbedne
             is_folder = True if is_folder == 'F' else False
 
             file = File(os.path.join(self.current_file_path, name))
-
-            # print(file)
 
             if not file:
                 return
             if file.is_folder():
                 self.open_folder(file)
                 return
-            # Zrefaktorowac
             self.open_file(self.current_file_path + "//" + file.get_name())
         except Exception as ex:
             pass
-            # self.open_popup(f'Nie można otworzyć pliku \n {ex}')
 
     def can_paste_files(self) -> bool:
         try:
             data = self.window.clipboard_get()
-            # print(f'in can_paste_files: \n {data}')
             return True
         except:
             return False
@@ -222,18 +227,17 @@ class FileExplorer:
             pass
 
     def copy_files_paths_to_clipboard(self, paths):
-        # print('Copping files')
         self.window.clipboard_clear()
         for path in paths:
             self.window.clipboard_append(path + '\n')
         self.window.update()
-        # data = self.window.clipboard_get()
-        # print(data)
 
-    def cut_files(self):
-        pass
+    def cut_files(self, paths):
+        self.cutting_files_mode = True
+        self.copy_files_paths_to_clipboard(paths)
 
     def pase_files(self):
+
         file_paths = self.window.clipboard_get().split('\n')
 
         for file_path in file_paths:
@@ -245,23 +249,28 @@ class FileExplorer:
             file_name = os.path.split(file_path)[-1]
             # jesli obecnym folderze istnieje plik o takiej samej nazwie
             if os.path.exists(os.path.join(self.current_file_path, file_name)):
-
                 copied_file_new_path = self.create_new_file_name(file_name)
 
-                # print('noewa nazwa:  ' + copied_file_new_path)
+            if self.cutting_files_mode:
+                try:
+                    shutil.move(file_path, copied_file_new_path)
+                except Exception as ex:
+                    self.open_popup(f'Nie udało sie przenieść \n{ex}')
+            else:
+                try:
+                    if os.path.isdir(file_path):
+                        folder_path = self.create_folder(
+                            file_name, rebuild_table=False)
+                        shutil.copytree(src=file_path,
+                                        dst=folder_path,  dirs_exist_ok=True, copy_function=shutil.copy)
+                    else:
+                        shutil.copy(src=file_path,
+                                    dst=copied_file_new_path)
+                except Exception as ex:
+                    self.open_popup(f'Nie udało sie wkleić \n{ex}')
 
-            try:
-                if os.path.isdir(file_path):
-                    folder_path = self.create_folder(
-                        file_name, rebuild_table=False)
-                    shutil.copytree(src=file_path,
-                                    dst=folder_path,  dirs_exist_ok=True, copy_function=shutil.copy)
-                else:
-                    shutil.copy(src=file_path,
-                                dst=copied_file_new_path)
-            except Exception as ex:
-                self.open_popup(f'Nie udało sie wkleić \n{ex}')
-
+        if self.cutting_files_mode:
+            self.cutting_files_mode = False
         self.rebuild_table()
 
     # Nowa nazwa aby uniknąć dwupłatowych nazw
@@ -322,7 +331,6 @@ class FileExplorer:
         self.rebuild_table()
 
     def open_popup(self, text="Błąd"):
-        print('here')
         popup = tk.Toplevel()
         popup.title("Popup Window")
 
@@ -367,10 +375,7 @@ class FileExplorer:
 
     def build_files_actions_menu(self):
         actions_menu = tk.Menu(self.window, tearoff=False)
-
         selected_file_paths = self.get_selected_file_paths()
-
-        # print(f'Building actions menu \n {selected_file_paths}')
 
         if len(selected_file_paths) == 0:
             actions_menu.add_command(
@@ -391,7 +396,8 @@ class FileExplorer:
 
         actions_menu.add_command(
             label="Kopiuj", command=lambda paths=selected_file_paths: self.copy_files_paths_to_clipboard(paths))
-        actions_menu.add_command(label="Wytnij", command=self.cut_files)
+        actions_menu.add_command(
+            label="Wytnij", command=lambda paths=selected_file_paths: self.cut_files(paths))
         actions_menu.add_command(label="Usuń", command=self.remove_files)
         return actions_menu
 

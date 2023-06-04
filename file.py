@@ -50,4 +50,4 @@ class File:
         return (self._name, self._is_folder, self._size, self._creation_time, self._modification_time)
 
     def get_data(self):
-        return (self._name, self._size, self._creation_time, self._modification_time)
+        return (self._name, self._size, self._creation_time.strftime("%Y-%m-%d %H:%M:%S"), self._modification_time.strftime("%Y-%m-%d %H:%M:%S"))
