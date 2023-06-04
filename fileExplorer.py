@@ -234,14 +234,11 @@ class FileExplorer:
         pass
 
     def pase_files(self):
-        print('Pasting files:')
         file_paths = self.window.clipboard_get().split('\n')
 
         for file_path in file_paths:
             if not os.path.exists(file_path):
                 continue
-
-            # copied_file_new_path = file_path NIE NIE NIE
 
             copied_file_new_path = self.current_file_path
 
@@ -255,8 +252,10 @@ class FileExplorer:
 
             try:
                 if os.path.isdir(file_path):
+                    folder_path = self.create_folder(
+                        file_name, rebuild_table=False)
                     shutil.copytree(src=file_path,
-                                    dst=copied_file_new_path,  dirs_exist_ok=True, copy_function=shutil.copy)
+                                    dst=folder_path,  dirs_exist_ok=True, copy_function=shutil.copy)
                 else:
                     shutil.copy(src=file_path,
                                 dst=copied_file_new_path)
@@ -302,13 +301,15 @@ class FileExplorer:
         except Exception as ex:
             self.open_popup(f'Nie można zmienić nazwy\n{ex}')
 
-    def create_folder(self, folder_name):
+    def create_folder(self, folder_name, rebuild_table=True):
         folder_path = os.path.join(self.current_file_path, folder_name)
         if os.path.exists(folder_path):
             folder_name = self.create_new_file_name(folder_name)
             folder_path = os.path.join(self.current_file_path, folder_name)
         os.mkdir(folder_path)
-        self.rebuild_table()
+        if (rebuild_table):
+            self.rebuild_table()
+        return folder_path
 
     def create_file(self, file_name):
         file_path = os.path.join(self.current_file_path, file_name)
