@@ -267,8 +267,15 @@ class FileExplorer:
     def delete_file(self, file: File) -> None:
         os.remove(file.get_path())
 
-    def rename_file(self, file_name):
-        pass
+    def rename_file(self, new_file_name):
+        if len(self.selected_files) < 1 or len(self.selected_files) > 1:
+            return
+        current_path = self.selected_files[0].get_path()
+        new_path = os.path.join(self.current_file_path, new_file_name)
+        try:
+            os.rename(current_path, new_path)
+        except Exception as ex:
+            self.open_popup(f'Nie można zmienić nazwy\n{ex}')
 
     def create_folder(self, folder_name):
         folder_path = os.path.join(self.current_file_path, folder_name)
@@ -348,6 +355,8 @@ class FileExplorer:
             if self.can_paste_files():
                 actions_menu.add_command(
                     label="Wklej", command=self.pase_files)
+                actions_menu.add_command(
+                    label="Wyczyść schowek", command=lambda: self.window.clipboard_clear())
             return actions_menu
 
         if len(selected_file_paths) == 1:
