@@ -8,7 +8,7 @@
 
 ## Uruchomienie
 
-Do uruchomiania potrzebne są 3 pliki w tym samym pliku: file.py, fileExplorer.py main.py
+Do uruchomiania potrzebne są 3 pliki w tym samym pliku: file.py, fileExplorer.py, main.py
 
 Aby uruchomić nalęży otworzyć pliku main.py przy uzyciy pythona
 
@@ -33,6 +33,8 @@ Nad tabelą zdajuje się scieżla w której obecnie dział aplikcaj
 Służy ona do nawigowania do scieżek nadżednych w któch znajduje się obecna sieżka, ostatni przysic scieżki to obecnie otworzeny folder, pozostałe to folder nadrzędne
 Pierszy przycisk pozwala na zmianę dysku przegladanego
 ![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/bf57026f-b89a-4dd4-b590-06c1343ee4c0)
+
+Nacisnięcie na koluny sortuje table (bez kolumny typ) według tej kolumny
 
 Pojedyńcze naciśnięcie na wiersz table zaznaczy ją
 
@@ -65,7 +67,18 @@ Torzenie plików i zmiana nazwy otrzorzą nowe okno w którymc nalży wpisać na
 
 Kopiowanie i wycianie pozwala skopiować plik i wkleić je puzniej działa zarówn dal plików jak i folderów z zwartości, w przupadku występowania indeycznej nazwy w docelowj scieżce wkejenia, wklejony zostanie plik z dokejonom data i czasem do nazwy, możliwe jest też kopiowanie plików z posta aplikacji np. przy użyciu ekspolartoa plików widows, i wklejanie go przy użyciu tej aplikacji, jednak funkcionalność ta niezostała w pełni przetestowana i może stwarzać problemy
 
+## Opis kodu
 
+Kod składa się z 3 plików: file.py, fileExplorer.py, main.py
 
+- main.py - służy jedynie do uruchomienia aplikacji
+- file.py - modelu zawierający klasę pomocniczą File służącą do przechowanania danych o pliku
+- fileExplorer.py - modeul zawierający klasę FileExplorer zajmującą się resztą to jest interfesem użytownika i operacjami na plikach
+
+W aplikcaji zostały użyte wbudowane biblioteki python:
+-  do przechowanie i wyświetlania czasu utworzeani i modeyfikacji pliku - datetime
+-  do operacji na plikach takich jak kopiwanie, przenoszeni, torzenie - os, sys, shutil
+-  do otwierania plików przy użyci domyślengo oprogramoania - subprocess
+-  do torzenia interfejsu użytkowanika, oraz przchowania danych w schowku - tkinter 
 
 
