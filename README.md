@@ -31,6 +31,7 @@ Po otworzeniu aplikacji wyświtlana jest tabla zawierająca pliki w domyslnej sc
 Nad tabelą zdajuje się scieżla w której obecnie dział aplikcaj
 ![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/e1714939-90ee-4939-91ce-740395410b16)
 Służy ona do nawigowania do scieżek nadżednych w któch znajduje się obecna sieżka, ostatni przysic scieżki to obecnie otworzeny folder, pozostałe to folder nadrzędne
+
 Pierszy przycisk pozwala na zmianę dysku przegladanego
 ![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/bf57026f-b89a-4dd4-b590-06c1343ee4c0)
 
@@ -69,6 +70,8 @@ Kopiowanie i wycianie pozwala skopiować plik i wkleić je puzniej działa zaró
 
 ## Opis kodu
 
+Kod aplikacji jest bardzo chaotyczny, nieschludny i niekosystętny.
+
 Kod składa się z 3 plików: file.py, fileExplorer.py, main.py
 
 - main.py - służy jedynie do uruchomienia aplikacji
@@ -79,6 +82,47 @@ W aplikcaji zostały użyte wbudowane biblioteki python:
 -  do przechowanie i wyświetlania czasu utworzeani i modeyfikacji pliku - datetime
 -  do operacji na plikach takich jak kopiwanie, przenoszeni, torzenie - os, sys, shutil
 -  do otwierania plików przy użyci domyślengo oprogramoania - subprocess
--  do torzenia interfejsu użytkowanika, oraz przchowania danych w schowku - tkinter 
+-  do torzenia interfejsu użytkowanika, oraz przchowania danych w schowku - tkinter
+
+### Główne funkcje kodu:
+
+#### Interface użytwkoania
+
+Interface użytwkia budowany jest przy użyciu  metod:
+- __init__ - inicializacaj interfacu 
+- build_table - budowa tabeli
+- build_breadcrumb - budowa scieżki nad tabela
+- build_files_actions_menu - budawa contekstowgo menu akcji
+- show_file_name_prompt_window - budawa wypisania nazwy do utrznenia nogo pliku lub zmiany nazwy pliku
+- open_popup - budowa okna do wyswietlania błedu
+
+Interafce jest przebudowanyw za każdy razem gdy okno zostaje wybrane lub wykonana zostaje opracaj na plikach (typu kopianie, tworzenie).
+Otorzenie folderu (po przez podujne kliknięcie) sktukje w następujących akcjach:
+- utorzenie nowj sieżki 
+- sprawdzeni instniena ścieżki
+- ustawienie tej scieżki jako obecną
+- usunięcia wszystkich przysicków z interfejsu nawicji po scieżce
+- wsawienia nowych przycisków
+- wczytania plików zdajdujących się w nowej scieżce
+- usunięcia wszystkich wierszy z tabeli
+- wstawinieu nowych wierzy do table
+
+Podabie wykoanyanie kacji na plikach wykonuj je następnie powtaza akcje niezbędne do przebudaowania interfajsu graficznego
+
+
+### Kopiowanie i wycinanie plików i fodlerów
+
+W celu kopiania plików i fodlerów użwany jest schowek ok tkinter, kopiowane są do niego scieżki plków zazacznych w tabeli.
+
+Wklejanie polega na proraniu ze schowak tych scieżek i skopiowania ich do obecnej sięciżki, przed wklejeniem sprawdzane jest czy w obecnej ścieżce nie występuje już taki plik, jeżli występuje to jego nazwa zostaje zmianion następnie plik są kopiawane.
+
+Podobnie działa wycianaie używa tych samych metod (co nie jest najczytelniejsze), ustawai jedynie flage która kontroluje czy plik mają być przeniesione czy kopiowane.
+
+Fragment kodu odpowiedzlany z kopiwanie / przenoszenie:
+![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/08f973bc-cf25-49a5-8401-0dd4607f1aa6)
+
+
+
+
 
 
