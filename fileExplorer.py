@@ -14,6 +14,10 @@ class FileExplorer:
         self.current_file_path = os.path.expanduser("~")
         self.button_list = []
 
+        self.sorting_function = lambda file: file.get_name()
+        self.last_ordering_direction = 'none'
+        self.sort_dsc = False
+
         self.files = self.get_files(self.current_file_path)
         self.selected_files = []
 
@@ -78,7 +82,23 @@ class FileExplorer:
         return drives
 
     def get_files(self, directory: str):
-        return sorted([File(os.path.join(directory, file_name)) for file_name in os.listdir(directory)], key=lambda file: file.get_name())
+        return sorted([File(os.path.join(directory, file_name)) for file_name in os.listdir(directory)], key=self.sorting_function, reverse=self.sort_dsc)
+
+    def sort_files(self, ordering):
+        sorting_functions = {
+            'name': lambda file: file.get_name(),
+            'size': lambda file: file.get_size(),
+            'cr_date': lambda file: file.get_creation_time(),
+            'md_date': lambda file: file.get_modification_time(),
+
+        }
+        if self.last_ordering_direction == ordering:
+            self.sort_dsc = not self.sort_dsc
+
+        self.last_ordering_direction = ordering
+        self.sorting_function = sorting_functions[ordering]
+        self.files = self.get_files(self.current_file_path)
+        self.rebuild_table()
 
     def get_selected_file_paths(self):
         selected_record_names = [self.treeview.item(selection)["values"][1]
@@ -395,14 +415,16 @@ class FileExplorer:
         self.treeview.column("Data utworzenia", stretch=tk.YES)
         self.treeview.column("Data modyfikacji", stretch=tk.YES)
 
-        self.treeview.heading("#0", text="", anchor=tk.W)
+        self.treeview.heading("#0", text="", )
         self.treeview.heading("Ikona", text="Ikona", anchor=tk.W)
-        self.treeview.heading("Nazwa", text="Nazwa", anchor=tk.W)
-        self.treeview.heading("Rozmiar", text="Rozmiar", anchor=tk.W)
+        self.treeview.heading("Nazwa", text="Nazwa", anchor=tk.W,
+                              command=lambda: self.sort_files('name'))
+        self.treeview.heading("Rozmiar", text="Rozmiar",
+                              anchor=tk.W, command=lambda: self.sort_files('size'))
         self.treeview.heading("Data utworzenia",
-                              text="Data utworzenia", anchor=tk.W)
+                              text="Data utworzenia", anchor=tk.W, command=lambda: self.sort_files('cr_date'))
         self.treeview.heading("Data modyfikacji",
-                              text="Data modyfikacji", anchor=tk.W)
+                              text="Data modyfikacji", anchor=tk.W, command=lambda: self.sort_files('md_date'))
 
         for file in files:
             if file.get_name()[0] == '.':
