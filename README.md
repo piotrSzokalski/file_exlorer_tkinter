@@ -1,139 +1,139 @@
 # file_exlorer_tkinter
 
- mały projekt szoklny na zajęcia python
+ mały projekt szkolny na zajęcia python
  
- ## Platrofy
+ ## Platformy
  
- aplikcaj powinna działac na platormach windows, macos, linux jedak testowa była tylko na systemie windows 10
+ aplikacja powinna działać na platformach windows, macos, linux jedak testowa była tylko na systemie windows 10
 
 ## Uruchomienie
 
 Do uruchomiania potrzebne są 3 pliki w tym samym pliku: file.py, fileExplorer.py, main.py
 
-Aby uruchomić nalęży otworzyć pliku main.py przy uzyciy pythona
+Aby uruchomić należy otworzyć pliku main.py przy użycia pythona
 
 przez terminal [ścieżka od python] main.py
 ![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/01665cbb-eec6-4598-b3be-7bd16403a1d2)
 
-przez ekslporatora plików
+przez eksploratora plików
 
 ![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/830c5fd7-5830-4a90-acb7-bc6662764c06)
 
-## Instrukacj obsługi
+## Instrukcja obsługi
 
-Po uruchomieniu otworzą się dwa okna terminal oraz Eksploratro plików
+Po uruchomieniu otworzą się dwa okna terminal oraz eksplorator plików
 
 ![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/34b9ce63-0ce8-45fe-b5dd-1d47763ec448)
 
-Okno terminal jest zbędne lecz zamknięcie go zakończy działanie aplikcaji
+Okno terminal jest zbędne lecz zamknięcie go zakończy działanie aplikacji
 
-Po otworzeniu aplikacji wyświtlana jest tabla zawierająca pliki w domyslnej scieżce
-Nad tabelą zdajuje się scieżla w której obecnie dział aplikcaj
+Po otworzeniu aplikacji wyświetlana jest tabla zawierająca pliki w domyślnej ścieżce
+Nad tabelą znajduje się ścieżka w której obecnie dział aplikacja
 ![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/e1714939-90ee-4939-91ce-740395410b16)
-Służy ona do nawigowania do scieżek nadżednych w któch znajduje się obecna sieżka, ostatni przysic scieżki to obecnie otworzeny folder, pozostałe to folder nadrzędne
+Służy ona do nawigowania do ścieżek nadrzędnych w których znajduje się obecna ścieżka, ostatni przycisk ścieżki to obecnie otworzony folder, pozostałe to folder nadrzędne
 
-Pierszy przycisk pozwala na zmianę dysku przegladanego
+Pierwszy przycisk pozwala na zmianę dysku przeglądanego
 ![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/bf57026f-b89a-4dd4-b590-06c1343ee4c0)
 
-Nacisnięcie na koluny sortuje table (bez kolumny typ) według tej kolumny
+Naciśnięcie na kolumny sortuje table (bez kolumny typ) według tej kolumny
 
-Pojedyńcze naciśnięcie na wiersz table zaznaczy ją
+Pojedyncze naciśnięcie na wiersz table zaznaczy ją
 
-Przytrzymianie klawisa Ctrl pozwala na zaznaczanie wielu wierszy oraz odznaczniu zaznaczonych wierszy
+Przytrzymanie klawisz Ctrl pozwala na zaznaczanie wielu wierszy oraz odznaczaniu zaznaczonych wierszy
 
-Podwujne naciśnięcie na otworzy plik na który wskazuje, jeśli jest to foder to otorzy go wyświetlając jego zawarotść, w przeciwnym wypadku otworzy go przy użyci domyśnego dla systemu oprogramowania służacego do otwieranie plików tek typu
+Podwójne naciśnięcie na otworzy plik na który wskazuje, jeśli jest to folder to otworzy go wyświetlając jego zawartość, w przeciwnym wypadku otworzy go przy użyci domyślnego dla systemu oprogramowania służącego do otwieranie plików tek typu
 
-Jeżeli plik, lub foler nie może zostać otorzny (np. z powodu braku uprawnień) wyświtlne zostanie okno z komunikatem błedu
+Jeżeli plik, lub folder nie może zostać otworzony (np. z powodu braku uprawnień), wyświetlone zostanie okno z komunikatem bledu
 
-Po naciśnięci prawego przysicku myszy na table wyświetlne zostanie menu kontekstowe, jego zawartość zależy os stanu aplikacji
+Po naciśnięci prawego przycisku myszy na table wyświetlone zostanie menu kontekstowe, jego zawartość zależy os stanu aplikacji
 
 ![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/a88cfe07-329d-46ad-9cdf-90c20f3e9a78)
 
-Jeżeli żadne pliki ani foldery nie są zaznaczone pozowli do:
-- utorzenie nowego pliku
-- utorzenie nowego folderu
-- wklejenie skopiowach, bądz wyciętych plików i folderów jeżli jakieś znajdują się w schowku
-- wyczyszenie schowka
+Jeżeli żadne pliki ani foldery nie są zaznaczone pozwoli do:
+- utworzenie nowego pliku
+- utworzenie nowego folderu
+- wklejenie skopiowanych, bądź wyciętych plików i folderów jeżeli jakieś znajdują się w schowku
+- wyczyszczenie schowka
 
-W przypaku zaznaczeni wielu plkiów/folderów pozowli:
+W przypadku zaznaczeni wielu plików/folderów pozwoli:
 - kopiować je
-- wytnąć (przenieść) je
+- wyciąć (przenieść) je
 - usunąć je
 
-Zaznacznei pojedyńczego pliku dostępne są opjec takie sam jak przy zaznacznieu wielu pliku plus opcja zmiany nazwy
+Zaznaczenie pojedynczego pliku dostępne są opcje takie sam jak przy zaznaczaniu wielu pliku plus opcja zmiany nazwy
 
-Torzenie plików i zmiana nazwy otrzorzą nowe okno w którymc nalży wpisać nazwe do zmiany/utworznia pliku
+Torzewie plików i zmiana nazwy otworzą nowe okno w którym należy wpisać nazwę do zmiany/utworzenia pliku
 
 ![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/1cfe4da5-569a-47e2-97ee-f8ad6cb35b0e)
 
-Kopiowanie i wycianie pozwala skopiować plik i wkleić je puzniej działa zarówn dal plików jak i folderów z zwartości, w przupadku występowania indeycznej nazwy w docelowj scieżce wkejenia, wklejony zostanie plik z dokejonom data i czasem do nazwy, możliwe jest też kopiowanie plików z posta aplikacji np. przy użyciu ekspolartoa plików widows, i wklejanie go przy użyciu tej aplikacji, jednak funkcionalność ta niezostała w pełni przetestowana i może stwarzać problemy
+Kopiowanie i wycinanie pozwala skopiować plik i wkleić je później działa zarówno dal plików jak i folderów z zwartości, w przypadku występowania indyczej nazwy w docelowej ścieżce wklejenia, wklejony zostanie plik z doklejoną data i czasem do nazwy, możliwe jest też kopiowanie plików z posta aplikacji np. przy użyciu eksplorator plików widows, i wklejanie go przy użyciu tej aplikacji, jednak funkcjonalność ta nie została w pełni przetestowana i może stwarzać problemy
 
 ## Opis kodu
 
-Kod aplikacji jest bardzo chaotyczny, nieschludny i niekosystętny.
+Kod aplikacji jest bardzo chaotyczny, nieschludny i niekonsystentny.
 
 Kod składa się z 3 plików: file.py, fileExplorer.py, main.py
 
 - main.py - służy jedynie do uruchomienia aplikacji
-- file.py - modelu zawierający klasę pomocniczą File służącą do przechowanania danych o pliku
-- fileExplorer.py - modeul zawierający klasę FileExplorer zajmującą się resztą to jest interfesem użytownika i operacjami na plikach
+- file.py - modelu zawierający klasę pomocniczą File służącą do przechowania danych o pliku
+- fileExplorer.py - moduł zawierający klasę FileExplorer zajmującą się resztą to jest interfejsem graficznym użytkownika i operacjami na plikach
 
-W aplikcaji zostały użyte wbudowane biblioteki python:
--  do przechowanie i wyświetlania czasu utworzeani i modeyfikacji pliku - datetime
--  do operacji na plikach takich jak kopiwanie, przenoszeni, torzenie - os, shutil
--  do otwierania plików przy użyci domyślengo oprogramoania - subprocess, sys
--  do torzenia interfejsu użytkowanika, oraz przchowania danych w schowku - tkinter
+W aplikacji zostały użyte wbudowane biblioteki python:
+-  do przechowanie i wyświetlania czasu utworzenia i modyfikacji pliku - datetime
+-  do operacji na plikach takich jak kopiowanie, przenoszeni, torzewie - os, shutil
+-  do otwierania plików przy użyci domyślnego programomania - subprocess, sys
+-  do tworzenia interfejsu użytkowania, oraz przechowania danych w schowku - tkinter
 
 ### Główne funkcje kodu:
 
+
+
 #### Interface użytwkoania
 
-Interface użytwkia budowany jest przy użyciu  metod:
-- __init__ - inicializacaj interfacu 
-- build_table - budowa tabeli
-- build_breadcrumb - budowa scieżki nad tabela
-- build_files_actions_menu - budawa contekstowgo menu akcji
-- show_file_name_prompt_window - budawa wypisania nazwy do utrznenia nogo pliku lub zmiany nazwy pliku
-- open_popup - budowa okna do wyswietlania błedu
+Interfejs użytkownika jest tworzony przy użyciu następujących metod:
+- `__init__` - inicializacja interfejsu
+- `build_table` - budowa tabeli
+- `build_breadcrumb` - budowa ścieżki nad tabelą
+- `build_files_actions_menu` - budowa kontekstowego menu akcji
+- `show_file_name_prompt_window` - budowa okna do wprowadzenia nowej nazwy pliku lub zmiany istniejącej nazwy
+- `open_popup` - budowa okna do wyświetlania błędu
 
-Interafce jest przebudowanyw za każdy razem gdy okno zostaje wybrane lub wykonana zostaje opracaj na plikach (typu kopianie, tworzenie).
-Otorzenie folderu (po przez podujne kliknięcie) sktukje w następujących akcjach:
-- utorzenie nowj sieżki 
-- sprawdzeni instniena ścieżki
-- ustawienie tej scieżki jako obecną
-- usunięcia wszystkich przysicków z interfejsu nawicji po scieżce
-- wsawienia nowych przycisków
-- wczytania plików zdajdujących się w nowej scieżce
-- usunięcia wszystkich wierszy z tabeli
-- wstawinieu nowych wierzy do table
+Interfejs jest przebudowywany za każdym razem, gdy wybrana zostaje nowa ścieżka lub wykonana zostaje operacja na plikach (np. kopiowanie, tworzenie).
+Otwarcie folderu (poprzez podwójne kliknięcie) powoduje wykonanie następujących akcji:
+- Utworzenie nowej ścieżki
+- Sprawdzenie istnienia ścieżki
+- Ustawienie tej ścieżki jako obecnej
+- Usunięcie wszystkich przycisków nawigacji nad ścieżką w interfejsie
+- Wstawienie nowych przycisków nawigacji
+- Wczytanie plików znajdujących się w nowej ścieżce
+- Usunięcie wszystkich wierszy z tabeli
+- Wstawienie nowych wierszy do tabeli
 
-Podabie wykoanyanie akcji na plikach wykonuj je następnie powtaza akcje niezbędne do przebudaowania interfajsu graficznego
+Podobnie, wykonanie akcji na plikach prowadzi do wykonania niezbędnych kroków w celu przebudowy interfejsu graficznego. Przepisz tekst bez błędów ortograficznych.
 
 
-#### Kopiowanie i wycinanie plików i fodlerów
 
-W celu kopiania plików i fodlerów użwany jest schowek ok tkinter, kopiowane są do niego scieżki plków zazacznych w tabeli.
 
-Wklejanie polega na proraniu ze schowak tych scieżek i skopiowania ich do obecnej sięciżki, przed wklejeniem sprawdzane jest czy w obecnej ścieżce nie występuje już taki plik, jeżli występuje to jego nazwa zostaje zmianion następnie plik są kopiawane.
+#### Kopiowanie i wycinanie plików i folderów
 
-Podobnie działa wycianaie używa tych samych metod (co nie jest najczytelniejsze), ustawai jedynie flage która kontroluje czy plik mają być przeniesione czy kopiowane.
+W celu kopiowania plików i folderów wykorzystywany jest schowek tkinter. Ścieżki zaznaczonych plików są kopiowane do schowka.
 
-Fragment kodu odpowiedzlany z kopiwanie / przenoszenie:
+Proces wklejania polega na odczytaniu ścieżek z schowka i skopiowaniu ich do obecnej lokalizacji. Przed wklejeniem, sprawdzane jest, czy w obecnej lokalizacji nie istnieje już plik o tej samej nazwie. Jeśli tak, to nazwa pliku zostaje zmieniona przez dołączenie daty i czasu, a następnie plik jest skopiowany.
+
+Procedura wycinania działa podobnie, korzystając z tych samych metod. Różnica polega na ustawieniu flagi, która kontroluje, czy pliki mają być przeniesione czy skopiowane.
+
+Poniżej przedstawiam fragment kodu odpowiedzialny za kopiowanie/przenoszenie:
 ![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/08f973bc-cf25-49a5-8401-0dd4607f1aa6)
 
-Mniejszą niedogodą okazało się kopiwanie folderów z zawortością, podczas gyd modul shutil dostarcza funkcji copytree kopiującą zawarość folderu, to niekopiuje on samego folderu, ostacznie rozwiąłem to torząc nowy folder o naziw kopiwanego folderu w miejszcu docelwmy i kopiwania zaworści do niego
+Mniejszym problemem okazało się kopiowanie folderów wraz z zawartością. Moduł `shutil` dostarcza funkcję `copytree`, która kopiuje zawartość folderu, ale nie kopiuje samego folderu. Ostatecznie rozwiązałem to, tworząc nowy folder o nazwie kopiowanego folderu w miejscu docelowym i kopiując jego zawartość do tego nowego folderu.
 
-#### Tworzenie, uswanie, zmiani nazwy
+#### Tworzenie, usuwanie, zmiana nazwy
 
-Pozostałe akcje na plikach używają wbudowanych metod dostarczynhc przez bilbioteki, nie ma tu dużo do mówienia
+Pozostałe operacje na plikach wykorzystują wbudowane metody dostarczane przez biblioteki. Nie ma zbyt wiele do powiedzenia na ten temat.
 
 #### Pozostałe
 
-Początkowon opracje na właściwościach aplikacji takich jak obecna scieżka czy lista plików w obecnje sciżce miały być zarządze metodami typ get, set zapweniającymi bezpieczeństow przed nieprawidłowaymi modyfikacjiam lecz szybsze okazła się używania ich jak zmiennych globalnych, w yniku czego jest kod zwiera kilka praktycznie bezurzytecznych metod użythc tylko raz czy 2.
+Początkowo operacje na właściwościach aplikacji, takich jak obecna ścieżka czy lista plików w obecnej ścieżce, miały być obsługiwane za pomocą metod typu get i set, zapewniających bezpieczeństwo przed nieprawidłowymi modyfikacjami. Jednak okazało się, że szybszym rozwiązaniem było używanie ich jak zmiennych globalnych. W rezultacie kod zawiera kilka praktycznie bezużytecznych metod używanych tylko raz lub dwa razy.
 
-
-#### Ostatecznie kod jako tako dział, lecz sporow można byłow by w nim porawić 
-
-
-
+#### Ostatecznie kod działa w miarę poprawnie, ale nadal można sporo poprawić.
 
