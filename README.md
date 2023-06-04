@@ -34,4 +34,32 @@ Służy ona do nawigowania do scieżek nadżednych w któch znajduje się obecna
 Pierszy przycisk pozwala na zmianę dysku przegladanego
 ![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/bf57026f-b89a-4dd4-b590-06c1343ee4c0)
 
+Pojedyńcze naciśnięcie na wiersz table zaznaczy ją
+
+Przytrzymianie klawisa Ctrl pozwala na zaznaczanie wielu wierszy oraz odznaczniu zaznaczonych wierszy
+
+Podwujne naciśnięcie na otworzy plik na który wskazuje, jeśli jest to foder to otorzy go wyświetlając jego zawarotść, w przeciwnym wypadku otworzy go przy użyci domyśnego dla systemu oprogramowania służacego do otwieranie plików tek typu
+
+Jeżeli plik, lub foler nie może zostać otorzny (np. z powodu braku uprawnień) wyświtlne zostanie okno z komunikatem błedu
+
+Po naciśnięci prawego przysicku myszy na table wyświetlne zostanie menu kontekstowe, jego zawartość zależy os stanu aplikacji
+
+![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/a88cfe07-329d-46ad-9cdf-90c20f3e9a78)
+
+Jeżeli żadne pliki ani foldery nie są zaznaczone pozowli do:
+- utorzenie nowego pliku
+- utorzenie nowego folderu
+- wklejenie skopiowach, bądz wyciętych plików i folderów jeżli jakieś znajdują się w schowku
+- wyczyszenie schowka
+
+W przypaku zaznaczeni wielu plkiów/folderów pozowli:
+- kopiować je
+- wytnąć (przenieść) je
+- usunąć je
+
+Zaznacznei pojedyńczego pliku dostępne są opjec takie sam jak przy zaznacznieu wielu pliku plus opcja zmiany nazwy
+
+
+
+
 
