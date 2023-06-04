@@ -59,6 +59,12 @@ W przypaku zaznaczeni wielu plkiów/folderów pozowli:
 
 Zaznacznei pojedyńczego pliku dostępne są opjec takie sam jak przy zaznacznieu wielu pliku plus opcja zmiany nazwy
 
+Torzenie plików i zmiana nazwy otrzorzą nowe okno w którymc nalży wpisać nazwe do zmiany/utworznia pliku
+
+![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/1cfe4da5-569a-47e2-97ee-f8ad6cb35b0e)
+
+Kopiowanie i wycianie pozwala skopiować plik i wkleić je puzniej działa zarówn dal plików jak i folderów z zwartości, w przupadku występowania indeycznej nazwy w docelowj scieżce wkejenia, wklejony zostanie plik z dokejonom data i czasem do nazwy, możliwe jest też kopiowanie plików z posta aplikacji np. przy użyciu ekspolartoa plików widows, i wklejanie go przy użyciu tej aplikacji, jednak funkcionalność ta niezostała w pełni przetestowana i może stwarzać problemy
+
 
 
 
