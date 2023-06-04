@@ -24,6 +24,13 @@ class File:
     def get_name(self) -> str:
         return self._name
 
+    def get_extension(self) -> str:
+        try:
+            extension = self._name.split('.')[1]
+            return extension
+        except:
+            return ''
+
     def is_folder(self) -> bool:
         return self._is_folder
 

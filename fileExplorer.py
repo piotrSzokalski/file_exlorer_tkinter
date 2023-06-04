@@ -43,7 +43,7 @@ class FileExplorer:
 
         self.treeview = ttk.Treeview(self.window, selectmode='extended')
 
-        self.treeview["columns"] = ('Ikona', "Nazwa", "Rozmiar",
+        self.treeview["columns"] = ('Typ', "Nazwa", "Rozmiar",
                                     "Data utworzenia", "Data modyfikacji")
 
     def on_window_focused(self, event):
@@ -415,14 +415,14 @@ class FileExplorer:
     def build_table(self, files):
 
         self.treeview.column("#0", width=0, stretch=tk.NO)
-        self.treeview.column("Ikona",  width=50)
+        self.treeview.column("Typ",  width=50)
         self.treeview.column("Nazwa", stretch=tk.YES)
         self.treeview.column("Rozmiar", stretch=tk.YES)
         self.treeview.column("Data utworzenia", stretch=tk.YES)
         self.treeview.column("Data modyfikacji", stretch=tk.YES)
 
         self.treeview.heading("#0", text="", )
-        self.treeview.heading("Ikona", text="Ikona", anchor=tk.W)
+        self.treeview.heading("Typ", text="Typ", anchor=tk.W)
         self.treeview.heading("Nazwa", text="Nazwa", anchor=tk.W,
                               command=lambda: self.sort_files('name'))
         self.treeview.heading("Rozmiar", text="Rozmiar",
@@ -436,7 +436,7 @@ class FileExplorer:
             if file.get_name()[0] == '.':
                 continue
 
-            icon = 'F' if file.is_folder() else 'P'
+            icon = 'Folder' if file.is_folder() else file.get_extension()
             self.treeview.insert(parent="", index="end",
                                  values=(icon,) + file.get_data())
             self.treeview.bind(
