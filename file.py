@@ -19,10 +19,17 @@ class File:
             os.path.getmtime(file_path))
 
     def get_path(self) -> str:
-        return self.get_path
+        return self.path
 
     def get_name(self) -> str:
         return self._name
+
+    def get_extension(self) -> str:
+        try:
+            extension = self._name.split('.')[1]
+            return extension
+        except:
+            return ''
 
     def is_folder(self) -> bool:
         return self._is_folder
