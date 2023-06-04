@@ -80,8 +80,8 @@ Kod składa się z 3 plików: file.py, fileExplorer.py, main.py
 
 W aplikcaji zostały użyte wbudowane biblioteki python:
 -  do przechowanie i wyświetlania czasu utworzeani i modeyfikacji pliku - datetime
--  do operacji na plikach takich jak kopiwanie, przenoszeni, torzenie - os, sys, shutil
--  do otwierania plików przy użyci domyślengo oprogramoania - subprocess
+-  do operacji na plikach takich jak kopiwanie, przenoszeni, torzenie - os, shutil
+-  do otwierania plików przy użyci domyślengo oprogramoania - subprocess, sys
 -  do torzenia interfejsu użytkowanika, oraz przchowania danych w schowku - tkinter
 
 ### Główne funkcje kodu:
@@ -107,10 +107,10 @@ Otorzenie folderu (po przez podujne kliknięcie) sktukje w następujących akcja
 - usunięcia wszystkich wierszy z tabeli
 - wstawinieu nowych wierzy do table
 
-Podabie wykoanyanie kacji na plikach wykonuj je następnie powtaza akcje niezbędne do przebudaowania interfajsu graficznego
+Podabie wykoanyanie akcji na plikach wykonuj je następnie powtaza akcje niezbędne do przebudaowania interfajsu graficznego
 
 
-### Kopiowanie i wycinanie plików i fodlerów
+#### Kopiowanie i wycinanie plików i fodlerów
 
 W celu kopiania plików i fodlerów użwany jest schowek ok tkinter, kopiowane są do niego scieżki plków zazacznych w tabeli.
 
@@ -121,7 +121,18 @@ Podobnie działa wycianaie używa tych samych metod (co nie jest najczytelniejsz
 Fragment kodu odpowiedzlany z kopiwanie / przenoszenie:
 ![image](https://github.com/piotrSzokalski/file_exlorer_tkinter/assets/101019797/08f973bc-cf25-49a5-8401-0dd4607f1aa6)
 
+Mniejszą niedogodą okazało się kopiwanie folderów z zawortością, podczas gyd modul shutil dostarcza funkcji copytree kopiującą zawarość folderu, to niekopiuje on samego folderu, ostacznie rozwiąłem to torząc nowy folder o naziw kopiwanego folderu w miejszcu docelwmy i kopiwania zaworści do niego
 
+#### Tworzenie, uswanie, zmiani nazwy
+
+Pozostałe akcje na plikach używają wbudowanych metod dostarczynhc przez bilbioteki, nie ma tu dużo do mówienia
+
+#### Pozostałe
+
+Początkowon opracje na właściwościach aplikacji takich jak obecna scieżka czy lista plików w obecnje sciżce miały być zarządze metodami typ get, set zapweniającymi bezpieczeństow przed nieprawidłowaymi modyfikacjiam lecz szybsze okazła się używania ich jak zmiennych globalnych, w yniku czego jest kod zwiera kilka praktycznie bezurzytecznych metod użythc tylko raz czy 2.
+
+
+#### Ostatecznie kod jako tako dział, lecz sporow można byłow by w nim porawić 
 
 
 
