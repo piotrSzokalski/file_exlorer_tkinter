@@ -46,6 +46,25 @@ class FileExplorer:
         self.treeview["columns"] = ('Typ', "Nazwa", "Rozmiar",
                                     "Data utworzenia", "Data modyfikacji")
 
+        style = ttk.Style()
+
+        style.configure("Custom.Treeview",
+                        background="#e0e0e0",
+                        foreground="black",
+                        fieldbackground="#f0f0f0",
+                        font=("Arial", 12),
+                        borderwidth=0,
+                        highlightthickness=0,
+                        rowheight=30
+                        )
+
+        style.map("Custom.Treeview",
+                  background=[('selected', '#a0a0a0')],
+                  foreground=[('selected', 'white')]
+                  )
+
+        self.treeview.config(style="Custom.Treeview")
+
     def on_window_focused(self, event):
         self.get_from_os_clipboard()
         # print('HERE')
