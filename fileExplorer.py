@@ -236,9 +236,6 @@ class FileExplorer:
         self.cutting_files_mode = True
         self.copy_files_paths_to_clipboard(paths)
 
-    def move_files(self):
-        pass
-
     def pase_files(self):
 
         file_paths = self.window.clipboard_get().split('\n')
