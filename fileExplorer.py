@@ -162,8 +162,12 @@ class FileExplorer:
             elif sys.platform == 'darwin':
                 subprocess.run(['open', file_path])
             elif sys.platform == 'win32':
-                subprocess.run(
-                    ['cmd', '/c', 'start', '', file_path], shell=True)
+                result = subprocess.run(
+                    ['cmd', '/c', 'start', '', file_path], shell=True, stderr=subprocess.PIPE, text=True)
+                if result.returncode != 0:
+                    error_message = result.stderr.strip()
+                    self.open_popup(
+                        f'Nie można otworzyć tego pliku:\n{error_message}')
             else:
                 raise OSError(f'Unsupported platform: {sys.platform}')
         except Exception as e:
@@ -197,8 +201,9 @@ class FileExplorer:
                 return
             # Zrefaktorowac
             self.open_file(self.current_file_path + "//" + file.get_name())
-        except:
+        except Exception as ex:
             pass
+            # self.open_popup(f'Nie można otworzyć pliku \n {ex}')
 
     def can_paste_files(self) -> bool:
         try:
